@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const port = process.env.PORT || 3000;
+
 const router = require("./routes");
 
 const notFoundMiddleware = require("./middlewares/notFound");
@@ -26,9 +28,9 @@ app.use("/api", router());
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-app.listen(3000, () => {
+app.listen(port, () => {
   mongoose
     .connect(process.env.CONNECTION_MONGODB)
     .then(() => console.log("DB Connected!"));
-  console.log(`Server is running on http://localhost:3000`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
