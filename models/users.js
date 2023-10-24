@@ -3,11 +3,15 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    name: String, // String is shorthand for {type: String}
+    name: {
+      type: String,
+      require: true,
+    }, // String is shorthand for {type: String}
     lastname: String,
     email: {
       type: String,
       match: /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/,
+      require: true,
     },
     password: String,
     rol: {

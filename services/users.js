@@ -48,7 +48,57 @@ const createUser = async (Data) => {
   }
 };
 
+const updateUser = async (id, data) => {
+  try {
+    console.log(data);
+    const user = await User.findByIdAndUpdate(id, data);
+
+    console.log(user);
+
+    if (!user) {
+      return {
+        success: false,
+        result: null,
+        message: "There was an error to update user.",
+      };
+    }
+
+    return {
+      success: true,
+      result: user,
+      message: "The user was updated successfully.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const deleteUser = async (id) => {
+  try {
+    const user = await User.findByIdAndDelete(id);
+
+    console.log(user);
+
+    return {
+      success: true,
+      result: user,
+      message: "The user was deleted successfully.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
 module.exports = {
   findUser,
   createUser,
+  updateUser,
+  deleteUser,
 };
