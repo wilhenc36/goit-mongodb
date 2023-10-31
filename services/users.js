@@ -1,16 +1,49 @@
 const User = require("../models/users");
 
-const findUser = async () => {
+const findUser = async (skip, limit) => {
   try {
-    const users = await User.find();
+    const countUser = await User.find().count();
+    const users = await User.find().skip(skip).limit(limit);
     console.log(users);
 
     return {
       success: true,
-      result: users,
+      result: {
+        countUser,
+        users
+      },
       message: "List of users",
     };
   } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const findIdUser = async id => {
+  try {
+    const user = await User.findById(id);
+    console.log(user);
+
+    if (!user) {
+      return {
+        success: false,
+        result: null,
+        message: 'Not found user',
+      };
+    }
+
+    return {
+      success: true,
+      result: user,
+      message: 'User',
+    };
+  } catch (error) {
+    console.log(error);
+
     return {
       success: false,
       result: null,
@@ -98,6 +131,7 @@ const deleteUser = async (id) => {
 };
 module.exports = {
   findUser,
+  findIdUser,
   createUser,
   updateUser,
   deleteUser,

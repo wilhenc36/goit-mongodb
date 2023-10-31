@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const moment = require("moment")
 const User = require("../models/users");
 
 const signIn = async (Data) => {
@@ -44,6 +46,58 @@ const signIn = async (Data) => {
   }
 };
 
+const login = async (email, password) => {
+  try {
+    const isUserExist = await User.findOne({
+      email: email
+    });
+
+    if (!isUserExist) {
+      return {
+        success: false,
+        result: null,
+        message: "Email or password is incorrect.",
+      };
+    }
+
+    const validPassword = await bcrypt.compare(password, isUserExist.password);
+
+    if (!validPassword) {
+      return {
+        success: false,
+        result: null,
+        message: "Email or password is incorrect.",
+      };
+    }
+
+    const token = jwt.sign(
+      {
+        fullname: `${isUserExist.name} ${isUserExist.lastname}`,
+        id: isUserExist._id,
+        rol: isUserExist.rol,
+        iat: moment().unix(),
+        exp: moment().add(4, "hours").unix(),
+      },
+      process.env.TOKEN_SECRET
+    );
+
+    return {
+      success: true,
+      result: {
+        token
+      },
+      message: "Login successfully."
+    }
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   signIn,
+  login
 };
