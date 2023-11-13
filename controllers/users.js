@@ -4,6 +4,7 @@ const findUser = async (req, res) => {
   try {
     const { skip, limit } = req.query;
 
+    console.log("Controller", skip, limit)
     const { success, result, message } = await servive.findUser(skip, limit);
 
     console.log(result);
@@ -53,7 +54,16 @@ const findIdUser = async (req, res) => {
 
 const createUser = (req, res) => {
   try {
-    const { success, result, message } = servive.createUser(req.body);
+    console.log(req.file)
+
+    const originalname = req.file.originalname;
+    const filename = req.file.filename;
+
+    const { success, result, message } = servive.createUser({
+      ...req.body,
+      originalname,
+      filename
+    });
 
     console.log(result);
     if (!success) {

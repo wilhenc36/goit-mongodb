@@ -17,8 +17,8 @@ const ensureAuthenticated = (req, res, next) => {
     console.log(payload)
 
     if(payload.exp <= moment().unix()) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            status: StatusCodes.UNAUTHORIZED,
+        return res.status(401).json({
+            result: null,
             message: "Invalid token."
         })
     }

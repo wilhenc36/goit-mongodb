@@ -22,6 +22,8 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    originalname: String,
+    filename: String
   },
   {
     versionKey: false,

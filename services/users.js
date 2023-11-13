@@ -54,7 +54,7 @@ const findIdUser = async id => {
 
 const createUser = async (Data) => {
   try {
-    console.log(Data);
+    console.log("Before create", Data);
     const userRegistered = await User.create(Data);
 
     console.log(userRegistered);

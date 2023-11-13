@@ -5,6 +5,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const swaggerJSDOC = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
+const multer  = require('multer')
+const { v4: uuid } = require("uuid")
+const path = require("path")
 
 const port = process.env.PORT || 3000;
 
@@ -21,6 +24,33 @@ app.use(
     extended: false,
   })
 );
+
+// Config multer
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "/uploads"),
+  filename: (req, file, cb) => {
+      cb(null, uuid() + path.extname(file.originalname).toLocaleLowerCase());
+  }
+})
+
+/* app.use(multer({ 
+  storage,
+  dest: path.join(__dirname, "../uploads"),
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpg|jpeg|png|gif/
+    const mimetype = filetypes.test(file.mimetype)
+    const extname = filetypes.test(path.extname(file.originalname).toLocaleLowerCase())
+
+    if (mimetype && extname) {
+      cb(null, true)
+    } else {
+      cb(new Error("It must be a valid ext."))
+    }
+  },
+  limits: 5 * 1024 * 1024
+}).single("photo")) */
+
+app.use(express.static(path.join(__dirname, "/uploads")))
 
 app.use(morgan("dev"));
 app.use(cors());

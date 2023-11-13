@@ -2,7 +2,7 @@ const service = require("../services/auth");
 
 const signIn = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log("Controller", req.body);
 
     const { success, result, message } = await service.signIn(req.body);
 
